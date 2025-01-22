@@ -53,7 +53,7 @@ const login = (req, res) => {
   const { email, password } = req.body;
 
   let sql = `SELECT * FROM pp_user WHERE email = ?`;
-  let values = email;
+  let values = [email];
   conn.query(sql, values, (err, result) => {
     if (err) {
       return res.status(StatusCodes.BAD_REQUEST).json({
