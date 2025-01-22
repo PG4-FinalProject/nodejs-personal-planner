@@ -12,6 +12,6 @@ const {
 router.get('/', ensureAuthorization, getUser);
 router.post('/join', join);
 router.post('/login', login);
-router.put('/edit', editUser);
+router.put('/edit', ensureAuthorization, editUser);
 
 module.exports = router;

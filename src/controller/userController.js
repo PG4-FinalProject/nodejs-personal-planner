@@ -98,8 +98,27 @@ const login = (req, res) => {
 };
 
 const editUser = (req, res) => {
-  return res.status(StatusCodes.OK).json({
-    message: '유저 정보 수정 성공!',
+  const decodedJWT = req.decodedJWT;
+  const { name } = req.body;
+
+  let sql = `UPDATE pp_user SET name = ? WHERE id = ?`;
+  let values = [name, decodedJWT.id];
+  conn.query(sql, values, (err, result) => {
+    if (err) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: '프로필 수정 실패!',
+      });
+    }
+
+    if (result.affectedRows) {
+      return res.status(StatusCodes.OK).json({
+        message: '프로필 수정 완료! 다시 로그인해주세요!',
+      });
+    } else {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: '프로필 수정 실패!',
+      });
+    }
   });
 };
 
