@@ -2,9 +2,39 @@ const conn = require('../mariadb');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const { StatusCodes } = require('http-status-codes');
+const ensureAuthorization = require('../utils/auth');
 
 const getUser = (req, res) => {
-  return res.status(StatusCodes.OK).end();
+  const authorization = ensureAuthorization(req);
+
+  if (authorization instanceof ReferenceError) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      message: '로그인을 해주세요',
+    });
+  }
+  if (authorization instanceof jwt.JsonWebTokenError) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: '잘못된 토큰입니다.',
+    });
+  }
+  if (authorization instanceof jwt.TokenExpiredError) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      message: '로그인 세션이 만료되었습니다. 다시 로그인 하세요',
+    });
+  }
+
+  let sql = `SELECT id, name, email FROM pp_user 
+    WHERE id = ?`;
+  let values = [authorization.id];
+  conn.query(sql, values, (err, result) => {
+    if (err) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: '프로필 조회 실패!',
+      });
+    }
+
+    return res.status(StatusCodes.OK).json(result[0]);
+  });
 };
 
 const join = (req, res) => {
