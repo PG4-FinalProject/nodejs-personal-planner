@@ -19,6 +19,7 @@ app.use(
     optionSuccessStatus: 200,
   }),
 );
+app.use(express.json());
 
 const userRouter = require('./routes/users');
 const planRouter = require('./routes/plans');
