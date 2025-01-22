@@ -20,14 +20,14 @@ const ensureAuthorization = (req, res, next) => {
         message: '로그인을 해주세요',
       });
     }
-    if (err instanceof jwt.JsonWebTokenError) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        message: '잘못된 토큰입니다.',
-      });
-    }
     if (err instanceof jwt.TokenExpiredError) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
         message: '로그인 세션이 만료되었습니다. 다시 로그인 하세요',
+      });
+    }
+    if (err instanceof jwt.JsonWebTokenError) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: '잘못된 토큰입니다.',
       });
     }
     return res.status(StatusCodes.UNAUTHORIZED).json({
