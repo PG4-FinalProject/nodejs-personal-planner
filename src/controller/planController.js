@@ -72,7 +72,7 @@ const editPlan = (req, res) => {
 
   let sql = `UPDATE plan 
     SET title = ?, detail = ?, start_time = ?, end_time = ?,
-    color = ?, category_id = ? WHERE user_id = ? AND id = ?`;
+    color = ?, category_id = ? WHERE id = ? AND user_id = ?`;
   let values = [
     title,
     detail,
@@ -106,7 +106,7 @@ const deletePlan = (req, res) => {
   const decodedJWT = req.decodedJWT;
   const { id: planId } = req.params;
 
-  let sql = `DELETE FROM plan WHERE user_id = ? AND id = ?`;
+  let sql = `DELETE FROM plan WHERE id = ? AND user_id = ?`;
   let values = [decodedJWT.id, planId];
   conn.query(sql, values, (err, result) => {
     if (err) {
