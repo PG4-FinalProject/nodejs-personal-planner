@@ -141,7 +141,8 @@ const notifyTodayPlan = async (req, res) => {
 
   try {
     let sql = `SELECT 
-      id, title, detail, start_time, end_time, color, category_id
+      id, title, detail, start_time, end_time, 
+      color, category_id AS categoryId
       FROM plan WHERE user_id = ? 
       AND DATEDIFF(DATE(start_time), DATE(?)) = 0
       AND TIMEDIFF(start_time, ?) > 0
@@ -150,7 +151,8 @@ const notifyTodayPlan = async (req, res) => {
     const [todayPlans] = await asyncConn.execute(sql, values);
 
     sql = `SELECT
-      id, title, detail, start_time, end_time, color, category_id
+      id, title, detail, start_time, end_time, 
+      color, category_id AS categoryId
       FROM plan WHERE user_id = ?
       AND TIMEDIFF(start_time, ?) <= 0
       AND TIMEDIFF(end_time, ?) >= 0`;
