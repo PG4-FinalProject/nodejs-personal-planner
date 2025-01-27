@@ -1,3 +1,4 @@
+const ensureAuthorization = require('../middlewares/auth.js');
 const express = require('express');
 const router = express.Router();
 
@@ -9,10 +10,10 @@ const {
   notifyTodayPlan,
 } = require('../controller/planController.js');
 
-router.get('/', getPlans);
-router.post('/', addPlan);
-router.put('/:id', editPlan);
-router.delete('/:id', deletePlan);
-router.get('/notifications/today', notifyTodayPlan);
+router.get('/', ensureAuthorization, getPlans);
+router.post('/', ensureAuthorization, addPlan);
+router.put('/:id', ensureAuthorization, editPlan);
+router.delete('/:id', ensureAuthorization, deletePlan);
+router.get('/notifications/today', ensureAuthorization, notifyTodayPlan);
 
 module.exports = router;
