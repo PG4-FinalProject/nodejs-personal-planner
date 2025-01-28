@@ -4,7 +4,8 @@ const { StatusCodes } = require('http-status-codes');
 const getAllNotifications = (req, res) => {
   decodedJWT = req.decodedJWT;
 
-  let sql = `SELECT id, title, text, created_at FROM notification 
+  let sql = `SELECT id, title, text, created_at AS createdAT
+    FROM notification 
     WHERE user_id = ? AND is_checked = false`;
   let values = [decodedJWT.id];
   conn.query(sql, values, (err, result) => {

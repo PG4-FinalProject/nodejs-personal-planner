@@ -72,7 +72,7 @@ const editPlan = (req, res) => {
 
   let sql = `UPDATE plan 
     SET title = ?, detail = ?, start_time = ?, end_time = ?,
-    color = ?, category_id = ? WHERE user_id = ? AND id = ?`;
+    color = ?, category_id = ? WHERE id = ? AND user_id = ?`;
   let values = [
     title,
     detail,
@@ -106,7 +106,7 @@ const deletePlan = (req, res) => {
   const decodedJWT = req.decodedJWT;
   const { id: planId } = req.params;
 
-  let sql = `DELETE FROM plan WHERE user_id = ? AND id = ?`;
+  let sql = `DELETE FROM plan WHERE id = ? AND user_id = ?`;
   let values = [decodedJWT.id, planId];
   conn.query(sql, values, (err, result) => {
     if (err) {
@@ -141,7 +141,8 @@ const notifyTodayPlan = async (req, res) => {
 
   try {
     let sql = `SELECT 
-      id, title, detail, start_time, end_time, color, category_id
+      id, title, detail, start_time, end_time, 
+      color, category_id AS categoryId
       FROM plan WHERE user_id = ? 
       AND DATEDIFF(DATE(start_time), DATE(?)) = 0
       AND TIMEDIFF(start_time, ?) > 0
@@ -150,7 +151,8 @@ const notifyTodayPlan = async (req, res) => {
     const [todayPlans] = await asyncConn.execute(sql, values);
 
     sql = `SELECT
-      id, title, detail, start_time, end_time, color, category_id
+      id, title, detail, start_time, end_time, 
+      color, category_id AS categoryId
       FROM plan WHERE user_id = ?
       AND TIMEDIFF(start_time, ?) <= 0
       AND TIMEDIFF(end_time, ?) >= 0`;
