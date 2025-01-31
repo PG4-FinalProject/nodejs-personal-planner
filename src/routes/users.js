@@ -7,7 +7,7 @@ const {
   join,
   login,
   editUser,
-} = require('../controller/userController.js');
+} = require('../controllers/userController.js');
 
 router.get('/', ensureAuthorization, getUser);
 router.post('/join', join);
