@@ -5,7 +5,7 @@ const router = express.Router();
 const {
   getAllNotifications,
   checkNotification,
-} = require('../controller/notificationController.js');
+} = require('../controllers/notificationController.js');
 
 router.get('/', ensureAuthorization, getAllNotifications);
 router.put('/:id', ensureAuthorization, checkNotification);

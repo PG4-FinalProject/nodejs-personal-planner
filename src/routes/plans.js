@@ -8,7 +8,7 @@ const {
   editPlan,
   deletePlan,
   notifyTodayPlan,
-} = require('../controller/planController.js');
+} = require('../controllers/planController.js');
 
 router.get('/', ensureAuthorization, getPlans);
 router.post('/', ensureAuthorization, addPlan);
