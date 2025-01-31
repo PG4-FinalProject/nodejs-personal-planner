@@ -60,9 +60,13 @@ const login = (req, res) => {
         message: '로그인 실패!',
       });
     }
+    if (result.length === 0) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: '로그인 실패!',
+      });
+    }
 
     const loginUser = result[0];
-
     const hashPassword = crypto
       .pbkdf2Sync(password, loginUser.salt, 10000, 10, 'sha512')
       .toString('base64');
