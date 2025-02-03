@@ -71,8 +71,8 @@ const editPlan = (req, res) => {
     startTime,
     endTime,
     categoryId,
-    decodedJWT.id,
     planId,
+    decodedJWT.id,
   ];
   conn.query(sql, values, (err, result) => {
     if (err) {
@@ -98,7 +98,7 @@ const deletePlan = (req, res) => {
   const { id: planId } = req.params;
 
   let sql = `DELETE FROM plan WHERE id = ? AND user_id = ?`;
-  let values = [decodedJWT.id, planId];
+  let values = [planId, decodedJWT.id];
   conn.query(sql, values, (err, result) => {
     if (err) {
       return res.status(StatusCodes.BAD_REQUEST).json({
