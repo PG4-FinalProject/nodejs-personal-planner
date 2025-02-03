@@ -80,7 +80,7 @@ const login = (req, res) => {
         },
         process.env.PRIVATE_KEY,
         {
-          expiresIn: '10m',
+          expiresIn: '30m',
           issuer: 'yschoi',
         },
       );
