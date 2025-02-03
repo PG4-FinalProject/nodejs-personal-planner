@@ -12,8 +12,8 @@ const getStatistics = (req, res) => {
 
   let sql = `SELECT 
     selected_plan.id, title, detail, 
-    start_time AS startTime, end_time AS endTime, color, 
-    category.id AS categoryId, category.name AS categoryName
+    start_time AS startTime, end_time AS endTime,
+    category.id AS categoryId, category.name AS categoryName, color
     FROM (SELECT * FROM plan WHERE user_id = ? 
     AND DATEDIFF(DATE( ? ), DATE(end_time)) <= ?
     AND DATEDIFF(DATE(start_time), DATE( ? )) <= ?) 
@@ -77,6 +77,7 @@ const getStatistics = (req, res) => {
           weeklyCategoryStatisticsArr.push({
             id: plan.categoryId,
             name: plan.categoryName,
+            color: plan.color,
             totalCount: 1,
             toDoCount: 1,
             completedCount: 0,
@@ -101,6 +102,7 @@ const getStatistics = (req, res) => {
           weeklyCategoryStatisticsArr.push({
             id: plan.categoryId,
             name: plan.categoryName,
+            color: plan.color,
             totalCount: 1,
             toDoCount: 0,
             completedCount: 1,

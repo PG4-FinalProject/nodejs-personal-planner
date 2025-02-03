@@ -32,20 +32,12 @@ const getPlans = (req, res) => {
 
 const addPlan = (req, res) => {
   const decodedJWT = req.decodedJWT;
-  const { title, detail, startTime, endTime, color, categoryId } = req.body;
+  const { title, detail, startTime, endTime, categoryId } = req.body;
 
   let sql = `INSERT INTO plan 
-    (title, detail, start_time, end_time, color, user_id, category_id)
-    VALUES (?, ?, ?, ?, ?, ?, ?)`;
-  let values = [
-    title,
-    detail,
-    startTime,
-    endTime,
-    color,
-    decodedJWT.id,
-    categoryId,
-  ];
+    (title, detail, start_time, end_time, user_id, category_id)
+    VALUES (?, ?, ?, ?, ?, ?)`;
+  let values = [title, detail, startTime, endTime, decodedJWT.id, categoryId];
   conn.query(sql, values, (err, result) => {
     if (err) {
       return res.status(StatusCodes.BAD_REQUEST).json({
@@ -68,17 +60,16 @@ const addPlan = (req, res) => {
 const editPlan = (req, res) => {
   const decodedJWT = req.decodedJWT;
   const { id: planId } = req.params;
-  const { title, detail, startTime, endTime, color, categoryId } = req.body;
+  const { title, detail, startTime, endTime, categoryId } = req.body;
 
   let sql = `UPDATE plan 
     SET title = ?, detail = ?, start_time = ?, end_time = ?,
-    color = ?, category_id = ? WHERE id = ? AND user_id = ?`;
+    category_id = ? WHERE id = ? AND user_id = ?`;
   let values = [
     title,
     detail,
     startTime,
     endTime,
-    color,
     categoryId,
     decodedJWT.id,
     planId,
@@ -142,7 +133,7 @@ const notifyTodayPlan = async (req, res) => {
   try {
     let sql = `SELECT 
       id, title, detail, start_time, end_time, 
-      color, category_id AS categoryId
+      category_id AS categoryId
       FROM plan WHERE user_id = ? 
       AND DATEDIFF(DATE(start_time), DATE(?)) = 0
       AND TIMEDIFF(start_time, ?) > 0
@@ -152,7 +143,7 @@ const notifyTodayPlan = async (req, res) => {
 
     sql = `SELECT
       id, title, detail, start_time, end_time, 
-      color, category_id AS categoryId
+      category_id AS categoryId
       FROM plan WHERE user_id = ?
       AND TIMEDIFF(start_time, ?) <= 0
       AND TIMEDIFF(end_time, ?) >= 0`;
