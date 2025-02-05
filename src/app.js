@@ -25,10 +25,8 @@ const userRouter = require('./routes/users');
 const planRouter = require('./routes/plans');
 const categoryRouter = require('./routes/categories');
 const notificationRouter = require('./routes/notifications');
-const statisticRouter = require('./routes/statistics');
 
 app.use('/users', userRouter);
 app.use('/plans', planRouter);
 app.use('/categories', categoryRouter);
 app.use('/notifications', notificationRouter);
-app.use('/statistics', statisticRouter);
