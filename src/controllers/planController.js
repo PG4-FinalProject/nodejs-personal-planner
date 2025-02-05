@@ -195,37 +195,37 @@ const getStatistics = (req, res) => {
     }
 
     const result = {
-      dailyStatistics: {
+      dailyStats: {
         totalCount: 0,
         toDoCount: 0,
         completedCount: 0,
       },
-      weeklyStatistics: {
+      weeklyStats: {
         totalCount: 0,
         toDoCount: 0,
         completedCount: 0,
       },
-      weeklyCategoryStatisticsArr: [],
+      weeklyCategoryStatsArr: [],
     };
     const {
-      dailyStatistics, //
-      weeklyStatistics,
-      weeklyCategoryStatisticsArr,
+      dailyStats, //
+      weeklyStats,
+      weeklyCategoryStatsArr,
     } = result;
 
     weekPlans.map(plan => {
       const startDateTime = new Date(plan.startTime);
       const endDateTime = new Date(plan.endTime);
 
-      weeklyStatistics.totalCount++;
+      weeklyStats.totalCount++;
       if (currentDateTime < endDateTime) {
-        weeklyStatistics.toDoCount++;
+        weeklyStats.toDoCount++;
         if (isSameDate(currentDateTime, endDateTime)) {
-          dailyStatistics.totalCount++;
-          dailyStatistics.toDoCount++;
+          dailyStats.totalCount++;
+          dailyStats.toDoCount++;
         }
         let isPlanInCategory = 0;
-        weeklyCategoryStatisticsArr.map(category => {
+        weeklyCategoryStatsArr.map(category => {
           if (category.id && category.id === plan.categoryId) {
             category.totalCount++;
             category.toDoCount++;
@@ -234,7 +234,7 @@ const getStatistics = (req, res) => {
           }
         });
         if (!isPlanInCategory) {
-          weeklyCategoryStatisticsArr.push({
+          weeklyCategoryStatsArr.push({
             id: plan.categoryId,
             name: plan.categoryName,
             color: plan.color,
@@ -244,13 +244,13 @@ const getStatistics = (req, res) => {
           });
         }
       } else {
-        weeklyStatistics.completedCount++;
+        weeklyStats.completedCount++;
         if (isSameDate(currentDateTime, endDateTime)) {
-          dailyStatistics.totalCount++;
-          dailyStatistics.completedCount++;
+          dailyStats.totalCount++;
+          dailyStats.completedCount++;
         }
         let isPlanInCategory = 0;
-        weeklyCategoryStatisticsArr.map(category => {
+        weeklyCategoryStatsArr.map(category => {
           if (category.id && category.id === plan.categoryId) {
             category.totalCount++;
             category.completedCount++;
@@ -259,7 +259,7 @@ const getStatistics = (req, res) => {
           }
         });
         if (!isPlanInCategory) {
-          weeklyCategoryStatisticsArr.push({
+          weeklyCategoryStatsArr.push({
             id: plan.categoryId,
             name: plan.categoryName,
             color: plan.color,
@@ -271,7 +271,7 @@ const getStatistics = (req, res) => {
       }
     });
 
-    weeklyCategoryStatisticsArr.sort((c1, c2) => c2.totalCount - c1.totalCount);
+    weeklyCategoryStatsArr.sort((c1, c2) => c2.totalCount - c1.totalCount);
 
     return res.status(StatusCodes.OK).json(result);
   });
